@@ -39,7 +39,7 @@ export function ContactsSidebar({ instanceId, selectedContactId, onSelect }: any
         .select('*, whatsapp_conversation_status(unread_count, status)')
         .eq('instance_id', instanceId)
         .eq('monitored', true)
-        .order('last_message_at', { ascending: false })
+        .order('last_message_at', { ascending: false, nullsFirst: true })
 
       if (searchTerm) {
         q = q.or(`push_name.ilike.%${searchTerm}%,phone_number.ilike.%${searchTerm}%`)
