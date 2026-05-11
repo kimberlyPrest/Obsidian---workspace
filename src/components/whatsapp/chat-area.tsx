@@ -43,13 +43,12 @@ export function ChatArea({ instanceId, contactId, onOpenContacts, onToggleDetail
         )
         .eq('instance_id', instanceId)
         .eq('remote_jid', jid)
-        .order('message_timestamp', { ascending: false })
+        .order('message_timestamp', { ascending: true })
         .range(p * pageSize, (p + 1) * pageSize - 1)
 
       if (data) {
-        const reversed = [...data].reverse()
-        if (p === 0) setMessages(reversed)
-        else setMessages((prev) => [...reversed, ...prev])
+        if (p === 0) setMessages(data)
+        else setMessages((prev) => [...data, ...prev])
         setHasMore(data.length === pageSize)
       }
       if (p === 0) setLoading(false)
