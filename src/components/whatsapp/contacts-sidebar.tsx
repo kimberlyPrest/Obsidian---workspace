@@ -176,3 +176,6 @@ export function ContactsSidebar({ instanceId, selectedContactId, onSelect }: any
           </div>
         )}
       </ScrollArea>
+    </div>
+  )
+}
