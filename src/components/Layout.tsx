@@ -1,5 +1,13 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
-import { Home, MessageSquare, LogOut, LayoutDashboard, Zap } from 'lucide-react'
+import {
+  Home,
+  MessageSquare,
+  LogOut,
+  LayoutDashboard,
+  Zap,
+  Lightbulb,
+  SendHorizontal,
+} from 'lucide-react'
 import { useAuth } from '@/hooks/use-auth'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -11,6 +19,8 @@ export default function Layout() {
   const navItems = [
     { name: 'Visão Geral', path: '/', icon: LayoutDashboard },
     { name: 'WhatsApp', path: '/whatsapp', icon: MessageSquare },
+    { name: 'Sugestões WhatsApp', path: '/whatsapp/suggestions', icon: Lightbulb },
+    { name: 'Fila de Envios', path: '/whatsapp/queue', icon: SendHorizontal },
   ]
 
   return (
