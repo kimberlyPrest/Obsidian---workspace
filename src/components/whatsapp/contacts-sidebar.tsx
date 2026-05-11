@@ -32,14 +32,14 @@ export function ContactsSidebar({ instanceId, selectedContactId, onSelect }: any
   const [loading, setLoading] = useState(true)
 
   const fetchContacts = useCallback(
-    async (searchTerm: string) => {
-      setLoading(true)
+    async (searchTerm: string, isBackground = false) => {
+      if (!isBackground) setLoading(true)
       let q = supabase
         .from('whatsapp_contacts')
         .select('*')
         .eq('instance_id', instanceId)
         .eq('monitored', true)
-        .order('last_message_at', { ascending: false, nullsFirst: true })
+        .order('last_message_at', { ascending: false, nullsLast: true })
 
       if (searchTerm) {
         q = q.or(`push_name.ilike.%${searchTerm}%,phone_number.ilike.%${searchTerm}%`)
@@ -62,13 +62,13 @@ export function ContactsSidebar({ instanceId, selectedContactId, onSelect }: any
       } else {
         setContacts([])
       }
-      setLoading(false)
+      if (!isBackground) setLoading(false)
     },
     [instanceId],
   )
 
   useEffect(() => {
-    const t = setTimeout(() => fetchContacts(search), 300)
+    const t = setTimeout(() => fetchContacts(search, false), 300)
     return () => clearTimeout(t)
   }, [search, fetchContacts])
 
@@ -78,22 +78,32 @@ export function ContactsSidebar({ instanceId, selectedContactId, onSelect }: any
       .on(
         'postgres_changes',
         {
-          event: '*',
+          event: 'UPDATE',
           schema: 'public',
-          table: 'whatsapp_contacts',
+          table: 'whatsapp_conversation_status',
           filter: `instance_id=eq.${instanceId}`,
         },
-        () => fetchContacts(search),
+        () => fetchContacts(search, true),
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'whatsapp_conversation_status',
+          filter: `instance_id=eq.${instanceId}`,
+        },
+        () => fetchContacts(search, true),
       )
       .on(
         'postgres_changes',
         {
           event: '*',
           schema: 'public',
-          table: 'whatsapp_conversation_status',
+          table: 'whatsapp_contacts',
           filter: `instance_id=eq.${instanceId}`,
         },
-        () => fetchContacts(search),
+        () => fetchContacts(search, true),
       )
       .subscribe()
     return () => {
