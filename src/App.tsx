@@ -7,6 +7,7 @@ import Layout from '@/components/Layout'
 import Dashboard from '@/pages/Dashboard'
 import Login from '@/pages/Login'
 import WhatsAppModule from '@/pages/WhatsApp'
+import WhatsAppSuggestions from '@/pages/WhatsAppSuggestions'
 import NotFound from '@/pages/NotFound'
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
@@ -38,6 +39,7 @@ const App = () => (
           >
             <Route path="/" element={<Dashboard />} />
             <Route path="/whatsapp" element={<WhatsAppModule />} />
+            <Route path="/whatsapp/suggestions" element={<WhatsAppSuggestions />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

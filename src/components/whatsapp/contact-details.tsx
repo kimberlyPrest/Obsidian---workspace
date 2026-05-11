@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { format } from 'date-fns'
 import { SendMessageDialog } from './send-message-dialog'
+import { useNavigate } from 'react-router-dom'
 import { User, Send, Lightbulb, Clock } from 'lucide-react'
 
 const safeFormatDate = (ts: string) => {
@@ -21,6 +22,7 @@ export function ContactDetails({ instanceId, contactId }: any) {
   const [contact, setContact] = useState<any>(null)
   const [status, setStatus] = useState<any>(null)
   const [sendOpen, setSendOpen] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     supabase
@@ -126,6 +128,7 @@ export function ContactDetails({ instanceId, contactId }: any) {
           <Button
             variant="outline"
             className="w-full bg-card-secondary border-border text-foreground hover:bg-border transition-colors"
+            onClick={() => navigate(`/whatsapp/suggestions?contactId=${contactId}`)}
           >
             <Lightbulb className="h-4 w-4 mr-2 text-warning" />
             Ver Sugestões
