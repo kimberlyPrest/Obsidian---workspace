@@ -7,6 +7,7 @@ import {
   Zap,
   Lightbulb,
   SendHorizontal,
+  BarChart,
 } from 'lucide-react'
 import { useAuth } from '@/hooks/use-auth'
 import { cn } from '@/lib/utils'
@@ -21,6 +22,7 @@ export default function Layout() {
     { name: 'WhatsApp', path: '/whatsapp', icon: MessageSquare },
     { name: 'Sugestões WhatsApp', path: '/whatsapp/suggestions', icon: Lightbulb },
     { name: 'Fila de Envios', path: '/whatsapp/queue', icon: SendHorizontal },
+    { name: 'Logs e Métricas', path: '/whatsapp/logs', icon: BarChart },
   ]
 
   return (
