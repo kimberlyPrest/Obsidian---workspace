@@ -38,9 +38,7 @@ export function ChatArea({ instanceId, contactId, onOpenContacts, onToggleDetail
       const pageSize = 20
       const { data } = await supabase
         .from('whatsapp_messages')
-        .select(
-          '*, quoted:whatsapp_messages!whatsapp_messages_quoted_message_id_fkey(content, from_me, media_type)',
-        )
+        .select('*, quoted:whatsapp_messages!quoted_message_id(content, from_me, media_type)')
         .eq('instance_id', instanceId)
         .eq('remote_jid', jid)
         .order('message_timestamp', { ascending: false })
