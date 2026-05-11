@@ -1,9 +1,9 @@
 {
   "_versions": {
-    "wpp-sync-history": 19,
-    "wpp-inbound": 5,
-    "wpp-outbound": 2,
-    "wpp-sync-text": 3,
-    "wpp-status": 7
+    "wpp-sync-history": 20,
+    "wpp-inbound": 6,
+    "wpp-outbound": 3,
+    "wpp-sync-text": 4,
+    "wpp-status": 8
   }
 }
