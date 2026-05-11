@@ -45,7 +45,7 @@ const App = () => (
             <Route path="/whatsapp/suggestions" element={<WhatsAppSuggestions />} />
             <Route path="/whatsapp/queue" element={<WhatsAppQueue />} />
             <Route path="/whatsapp/logs" element={<WhatsAppLogs />} />
-            <Route path="/whatsapp/settings" element={<WhatsAppSettings />} />
+            <Route path="/whatsapp/config" element={<WhatsAppSettings />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
