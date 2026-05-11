@@ -36,7 +36,7 @@ export function ContactsSidebar({ instanceId, selectedContactId, onSelect }: any
       setLoading(true)
       let q = supabase
         .from('whatsapp_contacts')
-        .select('*, whatsapp_conversation_status(unread_count, status)')
+        .select('*')
         .eq('instance_id', instanceId)
         .eq('monitored', true)
         .order('last_message_at', { ascending: false, nullsFirst: true })
@@ -46,7 +46,22 @@ export function ContactsSidebar({ instanceId, selectedContactId, onSelect }: any
       }
 
       const { data } = await q
-      if (data) setContacts(data)
+      if (data && data.length > 0) {
+        const contactIds = data.map((c) => c.id)
+        const { data: statuses } = await supabase
+          .from('whatsapp_conversation_status')
+          .select('contact_id, unread_count, status')
+          .in('contact_id', contactIds)
+
+        const statusMap = new Map(statuses?.map((s) => [s.contact_id, s]) || [])
+        const mergedData = data.map((c) => ({
+          ...c,
+          whatsapp_conversation_status: statusMap.get(c.id) || null,
+        }))
+        setContacts(mergedData)
+      } else {
+        setContacts([])
+      }
       setLoading(false)
     },
     [instanceId],
