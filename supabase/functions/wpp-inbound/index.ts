@@ -7,7 +7,15 @@ const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '
 
 // ── Tipos ────────────────────────────────────────────────────────────────────
 
-type MediaType = 'text' | 'audio' | 'image' | 'document' | 'video' | 'sticker' | 'reaction' | 'other'
+type MediaType =
+  | 'text'
+  | 'audio'
+  | 'image'
+  | 'document'
+  | 'video'
+  | 'sticker'
+  | 'reaction'
+  | 'other'
 type MessageStatus = 'received' | 'sent' | 'delivered' | 'read' | 'failed'
 type Direction = 'inbound' | 'outbound'
 type ConvStatus = 'pendente_resposta_minha' | 'aguardando_resposta_cliente' | 'finalizada'
@@ -37,31 +45,85 @@ function extractContent(data: Record<string, any>): {
   const msg = data.message ?? {}
 
   if (msg.conversation) {
-    return { content: msg.conversation, mediaType: 'text', wasAudio: false, mediaUrl: null, mediaMime: null }
+    return {
+      content: msg.conversation,
+      mediaType: 'text',
+      wasAudio: false,
+      mediaUrl: null,
+      mediaMime: null,
+    }
   }
   if (msg.extendedTextMessage?.text) {
-    return { content: msg.extendedTextMessage.text, mediaType: 'text', wasAudio: false, mediaUrl: null, mediaMime: null }
+    return {
+      content: msg.extendedTextMessage.text,
+      mediaType: 'text',
+      wasAudio: false,
+      mediaUrl: null,
+      mediaMime: null,
+    }
   }
   if (msg.audioMessage) {
-    return { content: null, mediaType: 'audio', wasAudio: true, mediaUrl: msg.audioMessage.url ?? null, mediaMime: msg.audioMessage.mimetype ?? 'audio/ogg' }
+    return {
+      content: null,
+      mediaType: 'audio',
+      wasAudio: true,
+      mediaUrl: msg.audioMessage.url ?? null,
+      mediaMime: msg.audioMessage.mimetype ?? 'audio/ogg',
+    }
   }
   if (msg.pttMessage) {
-    return { content: null, mediaType: 'audio', wasAudio: true, mediaUrl: msg.pttMessage.url ?? null, mediaMime: msg.pttMessage.mimetype ?? 'audio/ogg' }
+    return {
+      content: null,
+      mediaType: 'audio',
+      wasAudio: true,
+      mediaUrl: msg.pttMessage.url ?? null,
+      mediaMime: msg.pttMessage.mimetype ?? 'audio/ogg',
+    }
   }
   if (msg.imageMessage) {
-    return { content: msg.imageMessage.caption ?? null, mediaType: 'image', wasAudio: false, mediaUrl: msg.imageMessage.url ?? null, mediaMime: msg.imageMessage.mimetype ?? 'image/jpeg' }
+    return {
+      content: msg.imageMessage.caption ?? null,
+      mediaType: 'image',
+      wasAudio: false,
+      mediaUrl: msg.imageMessage.url ?? null,
+      mediaMime: msg.imageMessage.mimetype ?? 'image/jpeg',
+    }
   }
   if (msg.videoMessage) {
-    return { content: msg.videoMessage.caption ?? null, mediaType: 'video', wasAudio: false, mediaUrl: msg.videoMessage.url ?? null, mediaMime: msg.videoMessage.mimetype ?? 'video/mp4' }
+    return {
+      content: msg.videoMessage.caption ?? null,
+      mediaType: 'video',
+      wasAudio: false,
+      mediaUrl: msg.videoMessage.url ?? null,
+      mediaMime: msg.videoMessage.mimetype ?? 'video/mp4',
+    }
   }
   if (msg.documentMessage) {
-    return { content: msg.documentMessage.caption ?? null, mediaType: 'document', wasAudio: false, mediaUrl: msg.documentMessage.url ?? null, mediaMime: msg.documentMessage.mimetype ?? 'application/octet-stream' }
+    return {
+      content: msg.documentMessage.caption ?? null,
+      mediaType: 'document',
+      wasAudio: false,
+      mediaUrl: msg.documentMessage.url ?? null,
+      mediaMime: msg.documentMessage.mimetype ?? 'application/octet-stream',
+    }
   }
   if (msg.stickerMessage) {
-    return { content: null, mediaType: 'sticker', wasAudio: false, mediaUrl: msg.stickerMessage.url ?? null, mediaMime: msg.stickerMessage.mimetype ?? 'image/webp' }
+    return {
+      content: null,
+      mediaType: 'sticker',
+      wasAudio: false,
+      mediaUrl: msg.stickerMessage.url ?? null,
+      mediaMime: msg.stickerMessage.mimetype ?? 'image/webp',
+    }
   }
   if (msg.reactionMessage) {
-    return { content: msg.reactionMessage.text ?? null, mediaType: 'reaction', wasAudio: false, mediaUrl: null, mediaMime: null }
+    return {
+      content: msg.reactionMessage.text ?? null,
+      mediaType: 'reaction',
+      wasAudio: false,
+      mediaUrl: null,
+      mediaMime: null,
+    }
   }
 
   return { content: null, mediaType: 'other', wasAudio: false, mediaUrl: null, mediaMime: null }
@@ -184,10 +246,16 @@ Deno.serve(async (req) => {
     }
 
     const effectiveRemoteJid = resolvedJid
-    const effectivePhone = resolvedPhone ?? (isLid(effectiveRemoteJid) ? phoneFromJid(effectiveRemoteJid) : phoneFromJid(effectiveRemoteJid))
+    const effectivePhone =
+      resolvedPhone ??
+      (isLid(effectiveRemoteJid)
+        ? phoneFromJid(effectiveRemoteJid)
+        : phoneFromJid(effectiveRemoteJid))
 
     // ── Upsert whatsapp_contacts ──────────────────────────────────────────────
-    const msgTs = msgTimestamp ? new Date(msgTimestamp * 1000).toISOString() : new Date().toISOString()
+    const msgTs = msgTimestamp
+      ? new Date(msgTimestamp * 1000).toISOString()
+      : new Date().toISOString()
 
     const contactUpsert: Record<string, any> = {
       instance_id: instanceId,
@@ -235,7 +303,11 @@ Deno.serve(async (req) => {
           const newStatus = ackToStatus(data.ack)
           await supabase
             .from('whatsapp_messages')
-            .update({ status: newStatus, ack_level: data.ack, updated_at: new Date().toISOString() })
+            .update({
+              status: newStatus,
+              ack_level: data.ack,
+              updated_at: new Date().toISOString(),
+            })
             .eq('id', existing.id)
         }
         await markProcessed()
@@ -286,14 +358,14 @@ Deno.serve(async (req) => {
       messageRecord.reply_to_evolution_id = data.contextInfo.stanzaId
     }
 
-    const { error: insertError } = await supabase
-      .from('whatsapp_messages')
-      .insert(messageRecord)
+    const { error: insertError } = await supabase.from('whatsapp_messages').insert(messageRecord)
 
     if (insertError) throw new Error(`insert whatsapp_messages: ${insertError.message}`)
 
     // ── Upsert whatsapp_conversation_status ───────────────────────────────────
-    const convStatus: ConvStatus = fromMe ? 'aguardando_resposta_cliente' : 'pendente_resposta_minha'
+    const convStatus: ConvStatus = fromMe
+      ? 'aguardando_resposta_cliente'
+      : 'pendente_resposta_minha'
 
     const convPayload: Record<string, any> = {
       instance_id: instanceId,
