@@ -3,13 +3,14 @@ import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { AuthProvider, useAuth } from '@/hooks/use-auth'
-import Layout from '@/components/Layout'
+import { Layout } from '@/components/Layout'
 import Dashboard from '@/pages/Dashboard'
 import Login from '@/pages/Login'
 import WhatsAppModule from '@/pages/WhatsApp'
 import WhatsAppSuggestions from '@/pages/WhatsAppSuggestions'
 import WhatsAppQueue from '@/pages/WhatsAppQueue'
 import WhatsAppLogs from '@/pages/WhatsAppLogs'
+import WhatsAppSettings from '@/pages/WhatsAppSettings'
 import NotFound from '@/pages/NotFound'
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
@@ -44,6 +45,7 @@ const App = () => (
             <Route path="/whatsapp/suggestions" element={<WhatsAppSuggestions />} />
             <Route path="/whatsapp/queue" element={<WhatsAppQueue />} />
             <Route path="/whatsapp/logs" element={<WhatsAppLogs />} />
+            <Route path="/whatsapp/settings" element={<WhatsAppSettings />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -1,6 +1,6 @@
+import { useState } from 'react'
 import { Outlet, Link, useLocation } from 'react-router-dom'
 import {
-  Home,
   MessageSquare,
   LogOut,
   LayoutDashboard,
@@ -8,21 +8,26 @@ import {
   Lightbulb,
   SendHorizontal,
   BarChart,
+  Settings,
+  ChevronDown,
 } from 'lucide-react'
 import { useAuth } from '@/hooks/use-auth'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 
-export default function Layout() {
+export function Layout() {
   const { signOut } = useAuth()
   const location = useLocation()
+  const isWhatsappActive = location.pathname.startsWith('/whatsapp')
+  const [whatsappOpen, setWhatsappOpen] = useState(isWhatsappActive)
 
-  const navItems = [
-    { name: 'Visão Geral', path: '/', icon: LayoutDashboard },
-    { name: 'WhatsApp', path: '/whatsapp', icon: MessageSquare },
-    { name: 'Sugestões WhatsApp', path: '/whatsapp/suggestions', icon: Lightbulb },
+  const whatsappItems = [
+    { name: 'Dashboard', path: '/whatsapp', icon: MessageSquare },
+    { name: 'Sugestões', path: '/whatsapp/suggestions', icon: Lightbulb },
     { name: 'Fila de Envios', path: '/whatsapp/queue', icon: SendHorizontal },
     { name: 'Logs e Métricas', path: '/whatsapp/logs', icon: BarChart },
+    { name: 'Configurações', path: '/whatsapp/config', icon: Settings },
   ]
 
   return (
@@ -34,25 +39,61 @@ export default function Layout() {
           </div>
           <h1 className="font-heading text-lg font-bold text-foreground">Adapta Base</h1>
         </div>
-        <nav className="flex-1 px-4 py-6 space-y-2">
-          {navItems.map((item) => {
-            const isActive = location.pathname === item.path
-            return (
-              <Link key={item.path} to={item.path}>
-                <span
-                  className={cn(
-                    'flex items-center space-x-3 px-3 py-2.5 rounded-md transition-colors font-medium text-sm',
-                    isActive
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-muted-foreground hover:bg-card-secondary hover:text-foreground',
-                  )}
-                >
-                  <item.icon className="h-4 w-4" />
-                  <span>{item.name}</span>
-                </span>
-              </Link>
-            )
-          })}
+        <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+          <Link to="/">
+            <span
+              className={cn(
+                'flex items-center space-x-3 px-3 py-2.5 rounded-md transition-colors font-medium text-sm',
+                location.pathname === '/'
+                  ? 'bg-primary/10 text-primary'
+                  : 'text-muted-foreground hover:bg-card-secondary hover:text-foreground',
+              )}
+            >
+              <LayoutDashboard className="h-4 w-4" />
+              <span>Visão Geral</span>
+            </span>
+          </Link>
+
+          <Collapsible open={whatsappOpen} onOpenChange={setWhatsappOpen} className="space-y-1">
+            <CollapsibleTrigger asChild>
+              <button
+                className={cn(
+                  'flex items-center justify-between w-full space-x-3 px-3 py-2.5 rounded-md transition-colors font-medium text-sm',
+                  isWhatsappActive && !whatsappOpen
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-muted-foreground hover:bg-card-secondary hover:text-foreground',
+                )}
+              >
+                <div className="flex items-center space-x-3">
+                  <MessageSquare className="h-4 w-4" />
+                  <span>WhatsApp</span>
+                </div>
+                <ChevronDown
+                  className={cn('h-4 w-4 transition-transform', whatsappOpen && 'rotate-180')}
+                />
+              </button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="space-y-1 pl-6 pt-1">
+              {whatsappItems.map((item) => {
+                const isActive = location.pathname === item.path
+                return (
+                  <Link key={item.path} to={item.path}>
+                    <span
+                      className={cn(
+                        'flex items-center space-x-3 px-3 py-2.5 rounded-md transition-colors font-medium text-sm',
+                        isActive
+                          ? 'bg-primary/10 text-primary'
+                          : 'text-muted-foreground hover:bg-card-secondary hover:text-foreground',
+                      )}
+                    >
+                      <item.icon className="h-4 w-4" />
+                      <span>{item.name}</span>
+                    </span>
+                  </Link>
+                )
+              })}
+            </CollapsibleContent>
+          </Collapsible>
         </nav>
         <div className="p-4 border-t border-border">
           <Button
