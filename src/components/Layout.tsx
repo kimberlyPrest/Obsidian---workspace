@@ -27,7 +27,7 @@ export function Layout() {
     { name: 'Sugestões', path: '/whatsapp/suggestions', icon: Lightbulb },
     { name: 'Fila de Envios', path: '/whatsapp/queue', icon: SendHorizontal },
     { name: 'Logs e Métricas', path: '/whatsapp/logs', icon: BarChart },
-    { name: 'Configurações', path: '/whatsapp/config', icon: Settings },
+    { name: 'Configurações', path: '/whatsapp/settings', icon: Settings },
   ]
 
   return (

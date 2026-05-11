@@ -1,6 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import {
   Table,
   TableBody,
@@ -9,133 +20,221 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Loader2, Plus, ServerCrash, RefreshCcw } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import { TemplateModal } from './TemplateModal'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog'
+import { useToast } from '@/hooks/use-toast'
+import { FileText, Loader2 } from 'lucide-react'
 
 export function TemplatesTab() {
   const [templates, setTemplates] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [selectedTemplate, setSelectedTemplate] = useState<any | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [formData, setFormData] = useState<any>({})
+  const { toast } = useToast()
 
-  const loadData = async () => {
+  const load = async () => {
     setLoading(true)
-    setError(null)
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('whatsapp_templates_semanticos')
       .select('*')
       .order('total_uses', { ascending: false })
-      .limit(30)
-    if (error) setError(error.message)
-    else setTemplates(data || [])
+    setTemplates(data || [])
     setLoading(false)
   }
 
   useEffect(() => {
-    loadData()
+    load()
   }, [])
 
-  const handleEdit = (tpl: any) => {
-    setSelectedTemplate(tpl)
-    setIsModalOpen(true)
-  }
-  const handleCreate = () => {
-    setSelectedTemplate(null)
-    setIsModalOpen(true)
+  const handleSave = async () => {
+    const payload = {
+      template_text: formData.template_text,
+      trigger_pattern: formData.trigger_pattern || null,
+      tone_scope: formData.tone_scope || 'pessoal_geral',
+      client_id: formData.client_id || null,
+      auto_send_enabled: formData.auto_send_enabled || false,
+      em_prova_ate: formData.em_prova_ate || null,
+    }
+
+    if (formData.id) {
+      const { error } = await supabase
+        .from('whatsapp_templates_semanticos')
+        .update(payload)
+        .eq('id', formData.id)
+      if (error) toast({ title: 'Erro', description: error.message, variant: 'destructive' })
+      else {
+        toast({ title: 'Template atualizado' })
+        setIsModalOpen(false)
+        load()
+      }
+    } else {
+      const { error } = await supabase.from('whatsapp_templates_semanticos').insert(payload)
+      if (error) toast({ title: 'Erro', description: error.message, variant: 'destructive' })
+      else {
+        toast({ title: 'Template criado' })
+        setIsModalOpen(false)
+        load()
+      }
+    }
   }
 
-  if (loading)
-    return (
-      <div className="flex justify-center p-12">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-      </div>
-    )
-  if (error)
-    return (
-      <div className="text-center p-12 text-destructive">
-        <ServerCrash className="h-8 w-8 mx-auto mb-3" />
-        <p>{error}</p>
-        <Button variant="outline" onClick={loadData} className="mt-4">
-          <RefreshCcw className="w-4 h-4 mr-2" /> Tentar Novamente
-        </Button>
-      </div>
-    )
+  const handleDelete = async () => {
+    if (!formData.id || !window.confirm('Tem certeza que deseja deletar?')) return
+    const { error } = await supabase
+      .from('whatsapp_templates_semanticos')
+      .delete()
+      .eq('id', formData.id)
+    if (error) toast({ title: 'Erro', description: error.message, variant: 'destructive' })
+    else {
+      toast({ title: 'Template removido' })
+      setIsModalOpen(false)
+      load()
+    }
+  }
 
   return (
-    <div className="space-y-4 animate-fade-in">
+    <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold">Base de Conhecimento e Templates</h2>
-        <Button onClick={handleCreate}>
-          <Plus className="w-4 h-4 mr-2" /> Adicionar Template
+        <h2 className="text-lg font-semibold">Templates Semânticos</h2>
+        <Button
+          onClick={() => {
+            setFormData({})
+            setIsModalOpen(true)
+          }}
+        >
+          Adicionar Template
         </Button>
       </div>
 
-      {!templates.length ? (
-        <div className="text-center p-12 bg-muted/30 rounded-lg border border-dashed">
-          <p className="text-muted-foreground mb-4">
-            A base ainda não possui templates semânticos.
-          </p>
-          <Button onClick={handleCreate} variant="outline">
-            <Plus className="w-4 h-4 mr-2" /> Adicionar Primeiro Template
-          </Button>
-        </div>
-      ) : (
-        <div className="border rounded-md bg-background overflow-hidden">
-          <Table>
-            <TableHeader className="bg-muted/50">
+      <div className="border rounded-md">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Template (Preview)</TableHead>
+              <TableHead>Tone Scope</TableHead>
+              <TableHead>Aprovações Seguidas</TableHead>
+              <TableHead>Usos</TableHead>
+              <TableHead>Envio Automático</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {loading ? (
               <TableRow>
-                <TableHead className="w-2/5">Mensagem Base</TableHead>
-                <TableHead>Tone Scope</TableHead>
-                <TableHead className="text-center">Usos Efetuados</TableHead>
-                <TableHead className="text-center">Aprovações</TableHead>
-                <TableHead>Automação</TableHead>
+                <TableCell colSpan={5} className="text-center py-8">
+                  <Loader2 className="h-6 w-6 animate-spin mx-auto text-muted-foreground" />
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {templates.map((tpl) => (
+            ) : templates.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                  <FileText className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                  Sem templates
+                </TableCell>
+              </TableRow>
+            ) : (
+              templates.map((t) => (
                 <TableRow
-                  key={tpl.id}
-                  onClick={() => handleEdit(tpl)}
-                  className="cursor-pointer transition-colors hover:bg-muted/50"
+                  key={t.id}
+                  className="cursor-pointer hover:bg-muted/50"
+                  onClick={() => {
+                    setFormData(t)
+                    setIsModalOpen(true)
+                  }}
                 >
-                  <TableCell className="max-w-[250px]">
-                    <p className="truncate font-medium" title={tpl.template_text}>
-                      {tpl.template_text}
-                    </p>
-                    {tpl.trigger_pattern && (
-                      <p className="text-xs text-muted-foreground mt-1 font-mono truncate bg-muted inline-block px-1 rounded">
-                        RegEx: {tpl.trigger_pattern}
-                      </p>
-                    )}
+                  <TableCell className="font-medium max-w-[200px] truncate">
+                    {t.template_text}
                   </TableCell>
-                  <TableCell className="capitalize">{tpl.tone_scope.replace('_', ' ')}</TableCell>
-                  <TableCell className="text-center font-medium">{tpl.total_uses || 0}</TableCell>
-                  <TableCell className="text-center text-emerald-600 font-medium">
-                    {tpl.consecutive_approvals || 0}
-                  </TableCell>
-                  <TableCell>
-                    {tpl.auto_send_enabled ? (
-                      <Badge variant="default" className="bg-emerald-500 hover:bg-emerald-600">
-                        Ativo
-                      </Badge>
-                    ) : (
-                      <Badge variant="secondary">Inativo</Badge>
-                    )}
-                  </TableCell>
+                  <TableCell>{t.tone_scope}</TableCell>
+                  <TableCell>{t.consecutive_approvals}</TableCell>
+                  <TableCell>{t.total_uses}</TableCell>
+                  <TableCell>{t.auto_send_enabled ? 'Ativo' : 'Inativo'}</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      )}
-      <TemplateModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        template={selectedTemplate}
-        onSaved={loadData}
-      />
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{formData.id ? 'Detalhes do Template' : 'Novo Template'}</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label>Texto do Template</Label>
+              <Textarea
+                className="h-24"
+                value={formData.template_text || ''}
+                onChange={(e) => setFormData({ ...formData, template_text: e.target.value })}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label>Trigger Pattern (Regex opcional)</Label>
+              <Input
+                value={formData.trigger_pattern || ''}
+                onChange={(e) => setFormData({ ...formData, trigger_pattern: e.target.value })}
+                placeholder="^olá.*"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label>Tone Scope</Label>
+              <Select
+                value={formData.tone_scope || ''}
+                onValueChange={(v) => setFormData({ ...formData, tone_scope: v })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pessoal_geral">Geral (pessoal_geral)</SelectItem>
+                  <SelectItem value="client">Cliente Específico (client)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center space-x-2 mt-2">
+              <Switch
+                checked={formData.auto_send_enabled || false}
+                onCheckedChange={(c) => setFormData({ ...formData, auto_send_enabled: c })}
+              />
+              <Label>Envio Automático Habilitado</Label>
+            </div>
+            <div className="grid gap-2">
+              <Label>Em Prova Até (Data Opcional)</Label>
+              <Input
+                type="date"
+                value={formData.em_prova_ate ? formData.em_prova_ate.split('T')[0] : ''}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    em_prova_ate: e.target.value ? new Date(e.target.value).toISOString() : null,
+                  })
+                }
+              />
+            </div>
+          </div>
+          <DialogFooter className="flex justify-between sm:justify-between w-full">
+            {formData.id ? (
+              <Button variant="destructive" onClick={handleDelete}>
+                Deletar
+              </Button>
+            ) : (
+              <div />
+            )}
+            <div className="flex space-x-2">
+              <Button variant="outline" onClick={() => setIsModalOpen(false)}>
+                Cancelar
+              </Button>
+              <Button onClick={handleSave}>Salvar</Button>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
