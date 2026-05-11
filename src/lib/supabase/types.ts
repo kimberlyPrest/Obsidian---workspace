@@ -1,11 +1,17 @@
 // AVOID UPDATING THIS FILE DIRECTLY. It is automatically generated.
-export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
 
 export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: '14.5'
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
@@ -75,10 +81,10 @@ export type Database = {
           notes_path: string | null
           preferred_channel: string | null
           primary_phone: string | null
-          program: Database['public']['Enums']['program_enum']
+          program: Database["public"]["Enums"]["program_enum"]
           slug: string | null
           status: string
-          tracking_level: Database['public']['Enums']['tracking_level_enum']
+          tracking_level: Database["public"]["Enums"]["tracking_level_enum"]
           updated_at: string
         }
         Insert: {
@@ -101,10 +107,10 @@ export type Database = {
           notes_path?: string | null
           preferred_channel?: string | null
           primary_phone?: string | null
-          program?: Database['public']['Enums']['program_enum']
+          program?: Database["public"]["Enums"]["program_enum"]
           slug?: string | null
           status?: string
-          tracking_level?: Database['public']['Enums']['tracking_level_enum']
+          tracking_level?: Database["public"]["Enums"]["tracking_level_enum"]
           updated_at?: string
         }
         Update: {
@@ -127,10 +133,10 @@ export type Database = {
           notes_path?: string | null
           preferred_channel?: string | null
           primary_phone?: string | null
-          program?: Database['public']['Enums']['program_enum']
+          program?: Database["public"]["Enums"]["program_enum"]
           slug?: string | null
           status?: string
-          tracking_level?: Database['public']['Enums']['tracking_level_enum']
+          tracking_level?: Database["public"]["Enums"]["tracking_level_enum"]
           updated_at?: string
         }
         Relationships: []
@@ -204,11 +210,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'document_section_document_id_fkey'
-            columns: ['document_id']
+            foreignKeyName: "document_section_document_id_fkey"
+            columns: ["document_id"]
             isOneToOne: false
-            referencedRelation: 'document'
-            referencedColumns: ['id']
+            referencedRelation: "document"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -299,11 +305,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'evolution_webhook_log_instance_id_fkey'
-            columns: ['instance_id']
+            foreignKeyName: "evolution_webhook_log_instance_id_fkey"
+            columns: ["instance_id"]
             isOneToOne: false
-            referencedRelation: 'evolution_instances'
-            referencedColumns: ['id']
+            referencedRelation: "evolution_instances"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -347,7 +353,7 @@ export type Database = {
           examples_jsonb: Json
           id: string
           last_refined_at: string | null
-          scope: Database['public']['Enums']['tone_scope_enum']
+          scope: Database["public"]["Enums"]["tone_scope_enum"]
           style_guidelines_md: string | null
           total_examples: number
           updated_at: string
@@ -358,7 +364,7 @@ export type Database = {
           examples_jsonb?: Json
           id?: string
           last_refined_at?: string | null
-          scope: Database['public']['Enums']['tone_scope_enum']
+          scope: Database["public"]["Enums"]["tone_scope_enum"]
           style_guidelines_md?: string | null
           total_examples?: number
           updated_at?: string
@@ -369,18 +375,18 @@ export type Database = {
           examples_jsonb?: Json
           id?: string
           last_refined_at?: string | null
-          scope?: Database['public']['Enums']['tone_scope_enum']
+          scope?: Database["public"]["Enums"]["tone_scope_enum"]
           style_guidelines_md?: string | null
           total_examples?: number
           updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: 'tone_of_voice_client_id_fkey'
-            columns: ['client_id']
+            foreignKeyName: "tone_of_voice_client_id_fkey"
+            columns: ["client_id"]
             isOneToOne: false
-            referencedRelation: 'clients'
-            referencedColumns: ['id']
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -450,18 +456,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'whatsapp_contacts_client_id_fkey'
-            columns: ['client_id']
+            foreignKeyName: "whatsapp_contacts_client_id_fkey"
+            columns: ["client_id"]
             isOneToOne: false
-            referencedRelation: 'clients'
-            referencedColumns: ['id']
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'whatsapp_contacts_instance_id_fkey'
-            columns: ['instance_id']
+            foreignKeyName: "whatsapp_contacts_instance_id_fkey"
+            columns: ["instance_id"]
             isOneToOne: false
-            referencedRelation: 'evolution_instances'
-            referencedColumns: ['id']
+            referencedRelation: "evolution_instances"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -478,7 +484,7 @@ export type Database = {
           metadata: Json
           pending_inbound_message_id: string | null
           remote_jid: string
-          status: Database['public']['Enums']['conversation_status_enum']
+          status: Database["public"]["Enums"]["conversation_status_enum"]
           unread_count: number
           updated_at: string
         }
@@ -494,7 +500,7 @@ export type Database = {
           metadata?: Json
           pending_inbound_message_id?: string | null
           remote_jid: string
-          status?: Database['public']['Enums']['conversation_status_enum']
+          status?: Database["public"]["Enums"]["conversation_status_enum"]
           unread_count?: number
           updated_at?: string
         }
@@ -510,38 +516,38 @@ export type Database = {
           metadata?: Json
           pending_inbound_message_id?: string | null
           remote_jid?: string
-          status?: Database['public']['Enums']['conversation_status_enum']
+          status?: Database["public"]["Enums"]["conversation_status_enum"]
           unread_count?: number
           updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: 'whatsapp_conversation_status_client_id_fkey'
-            columns: ['client_id']
+            foreignKeyName: "whatsapp_conversation_status_client_id_fkey"
+            columns: ["client_id"]
             isOneToOne: false
-            referencedRelation: 'clients'
-            referencedColumns: ['id']
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'whatsapp_conversation_status_contact_id_fkey'
-            columns: ['contact_id']
+            foreignKeyName: "whatsapp_conversation_status_contact_id_fkey"
+            columns: ["contact_id"]
             isOneToOne: false
-            referencedRelation: 'whatsapp_contacts'
-            referencedColumns: ['id']
+            referencedRelation: "whatsapp_contacts"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'whatsapp_conversation_status_instance_id_fkey'
-            columns: ['instance_id']
+            foreignKeyName: "whatsapp_conversation_status_instance_id_fkey"
+            columns: ["instance_id"]
             isOneToOne: false
-            referencedRelation: 'evolution_instances'
-            referencedColumns: ['id']
+            referencedRelation: "evolution_instances"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'whatsapp_conversation_status_pending_inbound_message_id_fkey'
-            columns: ['pending_inbound_message_id']
+            foreignKeyName: "whatsapp_conversation_status_pending_inbound_message_id_fkey"
+            columns: ["pending_inbound_message_id"]
             isOneToOne: false
-            referencedRelation: 'whatsapp_messages'
-            referencedColumns: ['id']
+            referencedRelation: "whatsapp_messages"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -555,7 +561,7 @@ export type Database = {
           content: string | null
           created_at: string
           delivered_at: string | null
-          direction: Database['public']['Enums']['message_direction_enum']
+          direction: Database["public"]["Enums"]["message_direction_enum"]
           error_reason: string | null
           evolution_event_id: string | null
           evolution_message_id: string | null
@@ -568,7 +574,7 @@ export type Database = {
           media_mime: string | null
           media_size_bytes: number | null
           media_storage_path: string | null
-          media_type: Database['public']['Enums']['message_media_type_enum']
+          media_type: Database["public"]["Enums"]["message_media_type_enum"]
           media_url: string | null
           message_timestamp: string
           message_type: string | null
@@ -582,7 +588,7 @@ export type Database = {
           remote_jid: string
           reply_to_evolution_id: string | null
           sent_at: string | null
-          status: Database['public']['Enums']['message_status_enum']
+          status: Database["public"]["Enums"]["message_status_enum"]
           transcript: string | null
           updated_at: string
           was_audio: boolean
@@ -596,7 +602,7 @@ export type Database = {
           content?: string | null
           created_at?: string
           delivered_at?: string | null
-          direction: Database['public']['Enums']['message_direction_enum']
+          direction: Database["public"]["Enums"]["message_direction_enum"]
           error_reason?: string | null
           evolution_event_id?: string | null
           evolution_message_id?: string | null
@@ -609,7 +615,7 @@ export type Database = {
           media_mime?: string | null
           media_size_bytes?: number | null
           media_storage_path?: string | null
-          media_type?: Database['public']['Enums']['message_media_type_enum']
+          media_type?: Database["public"]["Enums"]["message_media_type_enum"]
           media_url?: string | null
           message_timestamp: string
           message_type?: string | null
@@ -623,7 +629,7 @@ export type Database = {
           remote_jid: string
           reply_to_evolution_id?: string | null
           sent_at?: string | null
-          status?: Database['public']['Enums']['message_status_enum']
+          status?: Database["public"]["Enums"]["message_status_enum"]
           transcript?: string | null
           updated_at?: string
           was_audio?: boolean
@@ -637,7 +643,7 @@ export type Database = {
           content?: string | null
           created_at?: string
           delivered_at?: string | null
-          direction?: Database['public']['Enums']['message_direction_enum']
+          direction?: Database["public"]["Enums"]["message_direction_enum"]
           error_reason?: string | null
           evolution_event_id?: string | null
           evolution_message_id?: string | null
@@ -650,7 +656,7 @@ export type Database = {
           media_mime?: string | null
           media_size_bytes?: number | null
           media_storage_path?: string | null
-          media_type?: Database['public']['Enums']['message_media_type_enum']
+          media_type?: Database["public"]["Enums"]["message_media_type_enum"]
           media_url?: string | null
           message_timestamp?: string
           message_type?: string | null
@@ -664,39 +670,39 @@ export type Database = {
           remote_jid?: string
           reply_to_evolution_id?: string | null
           sent_at?: string | null
-          status?: Database['public']['Enums']['message_status_enum']
+          status?: Database["public"]["Enums"]["message_status_enum"]
           transcript?: string | null
           updated_at?: string
           was_audio?: boolean
         }
         Relationships: [
           {
-            foreignKeyName: 'whatsapp_messages_client_id_fkey'
-            columns: ['client_id']
+            foreignKeyName: "whatsapp_messages_client_id_fkey"
+            columns: ["client_id"]
             isOneToOne: false
-            referencedRelation: 'clients'
-            referencedColumns: ['id']
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'whatsapp_messages_contact_id_fkey'
-            columns: ['contact_id']
+            foreignKeyName: "whatsapp_messages_contact_id_fkey"
+            columns: ["contact_id"]
             isOneToOne: false
-            referencedRelation: 'whatsapp_contacts'
-            referencedColumns: ['id']
+            referencedRelation: "whatsapp_contacts"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'whatsapp_messages_instance_id_fkey'
-            columns: ['instance_id']
+            foreignKeyName: "whatsapp_messages_instance_id_fkey"
+            columns: ["instance_id"]
             isOneToOne: false
-            referencedRelation: 'evolution_instances'
-            referencedColumns: ['id']
+            referencedRelation: "evolution_instances"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'whatsapp_messages_quoted_message_id_fkey'
-            columns: ['quoted_message_id']
+            foreignKeyName: "whatsapp_messages_quoted_message_id_fkey"
+            columns: ["quoted_message_id"]
             isOneToOne: false
-            referencedRelation: 'whatsapp_messages'
-            referencedColumns: ['id']
+            referencedRelation: "whatsapp_messages"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -715,17 +721,17 @@ export type Database = {
           jitter_aplicado_ms: number | null
           last_error: string | null
           lote_position: number | null
-          media_type: Database['public']['Enums']['message_media_type_enum']
+          media_type: Database["public"]["Enums"]["message_media_type_enum"]
           media_url: string | null
           metadata: Json
-          priority: Database['public']['Enums']['outbound_priority_enum']
+          priority: Database["public"]["Enums"]["outbound_priority_enum"]
           read_at: string | null
           remote_jid: string
           result_message_id: string | null
           scheduled_at: string
           sent_at: string | null
           source_suggestion_id: string | null
-          status: Database['public']['Enums']['outbound_status_enum']
+          status: Database["public"]["Enums"]["outbound_status_enum"]
           updated_at: string
         }
         Insert: {
@@ -742,17 +748,17 @@ export type Database = {
           jitter_aplicado_ms?: number | null
           last_error?: string | null
           lote_position?: number | null
-          media_type?: Database['public']['Enums']['message_media_type_enum']
+          media_type?: Database["public"]["Enums"]["message_media_type_enum"]
           media_url?: string | null
           metadata?: Json
-          priority?: Database['public']['Enums']['outbound_priority_enum']
+          priority?: Database["public"]["Enums"]["outbound_priority_enum"]
           read_at?: string | null
           remote_jid: string
           result_message_id?: string | null
           scheduled_at: string
           sent_at?: string | null
           source_suggestion_id?: string | null
-          status?: Database['public']['Enums']['outbound_status_enum']
+          status?: Database["public"]["Enums"]["outbound_status_enum"]
           updated_at?: string
         }
         Update: {
@@ -769,54 +775,54 @@ export type Database = {
           jitter_aplicado_ms?: number | null
           last_error?: string | null
           lote_position?: number | null
-          media_type?: Database['public']['Enums']['message_media_type_enum']
+          media_type?: Database["public"]["Enums"]["message_media_type_enum"]
           media_url?: string | null
           metadata?: Json
-          priority?: Database['public']['Enums']['outbound_priority_enum']
+          priority?: Database["public"]["Enums"]["outbound_priority_enum"]
           read_at?: string | null
           remote_jid?: string
           result_message_id?: string | null
           scheduled_at?: string
           sent_at?: string | null
           source_suggestion_id?: string | null
-          status?: Database['public']['Enums']['outbound_status_enum']
+          status?: Database["public"]["Enums"]["outbound_status_enum"]
           updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: 'whatsapp_outbound_queue_client_id_fkey'
-            columns: ['client_id']
+            foreignKeyName: "whatsapp_outbound_queue_client_id_fkey"
+            columns: ["client_id"]
             isOneToOne: false
-            referencedRelation: 'clients'
-            referencedColumns: ['id']
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'whatsapp_outbound_queue_contact_id_fkey'
-            columns: ['contact_id']
+            foreignKeyName: "whatsapp_outbound_queue_contact_id_fkey"
+            columns: ["contact_id"]
             isOneToOne: false
-            referencedRelation: 'whatsapp_contacts'
-            referencedColumns: ['id']
+            referencedRelation: "whatsapp_contacts"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'whatsapp_outbound_queue_instance_id_fkey'
-            columns: ['instance_id']
+            foreignKeyName: "whatsapp_outbound_queue_instance_id_fkey"
+            columns: ["instance_id"]
             isOneToOne: false
-            referencedRelation: 'evolution_instances'
-            referencedColumns: ['id']
+            referencedRelation: "evolution_instances"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'whatsapp_outbound_queue_result_message_id_fkey'
-            columns: ['result_message_id']
+            foreignKeyName: "whatsapp_outbound_queue_result_message_id_fkey"
+            columns: ["result_message_id"]
             isOneToOne: false
-            referencedRelation: 'whatsapp_messages'
-            referencedColumns: ['id']
+            referencedRelation: "whatsapp_messages"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'whatsapp_outbound_queue_source_suggestion_id_fkey'
-            columns: ['source_suggestion_id']
+            foreignKeyName: "whatsapp_outbound_queue_source_suggestion_id_fkey"
+            columns: ["source_suggestion_id"]
             isOneToOne: false
-            referencedRelation: 'whatsapp_suggestions'
-            referencedColumns: ['id']
+            referencedRelation: "whatsapp_suggestions"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -871,39 +877,39 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'whatsapp_response_metrics_client_id_fkey'
-            columns: ['client_id']
+            foreignKeyName: "whatsapp_response_metrics_client_id_fkey"
+            columns: ["client_id"]
             isOneToOne: false
-            referencedRelation: 'clients'
-            referencedColumns: ['id']
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'whatsapp_response_metrics_contact_id_fkey'
-            columns: ['contact_id']
+            foreignKeyName: "whatsapp_response_metrics_contact_id_fkey"
+            columns: ["contact_id"]
             isOneToOne: false
-            referencedRelation: 'whatsapp_contacts'
-            referencedColumns: ['id']
+            referencedRelation: "whatsapp_contacts"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'whatsapp_response_metrics_inbound_message_id_fkey'
-            columns: ['inbound_message_id']
+            foreignKeyName: "whatsapp_response_metrics_inbound_message_id_fkey"
+            columns: ["inbound_message_id"]
             isOneToOne: false
-            referencedRelation: 'whatsapp_messages'
-            referencedColumns: ['id']
+            referencedRelation: "whatsapp_messages"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'whatsapp_response_metrics_instance_id_fkey'
-            columns: ['instance_id']
+            foreignKeyName: "whatsapp_response_metrics_instance_id_fkey"
+            columns: ["instance_id"]
             isOneToOne: false
-            referencedRelation: 'evolution_instances'
-            referencedColumns: ['id']
+            referencedRelation: "evolution_instances"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'whatsapp_response_metrics_outbound_message_id_fkey'
-            columns: ['outbound_message_id']
+            foreignKeyName: "whatsapp_response_metrics_outbound_message_id_fkey"
+            columns: ["outbound_message_id"]
             isOneToOne: false
-            referencedRelation: 'whatsapp_messages'
-            referencedColumns: ['id']
+            referencedRelation: "whatsapp_messages"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -920,10 +926,10 @@ export type Database = {
           id: string
           model_used: string | null
           remote_jid: string
-          status: Database['public']['Enums']['suggestion_status_enum']
+          status: Database["public"]["Enums"]["suggestion_status_enum"]
           suggested_text: string
           template_id: string | null
-          tone_used: Database['public']['Enums']['tone_scope_enum'] | null
+          tone_used: Database["public"]["Enums"]["tone_scope_enum"] | null
           trigger_message_id: string | null
           updated_at: string
         }
@@ -939,10 +945,10 @@ export type Database = {
           id?: string
           model_used?: string | null
           remote_jid: string
-          status?: Database['public']['Enums']['suggestion_status_enum']
+          status?: Database["public"]["Enums"]["suggestion_status_enum"]
           suggested_text: string
           template_id?: string | null
-          tone_used?: Database['public']['Enums']['tone_scope_enum'] | null
+          tone_used?: Database["public"]["Enums"]["tone_scope_enum"] | null
           trigger_message_id?: string | null
           updated_at?: string
         }
@@ -958,34 +964,34 @@ export type Database = {
           id?: string
           model_used?: string | null
           remote_jid?: string
-          status?: Database['public']['Enums']['suggestion_status_enum']
+          status?: Database["public"]["Enums"]["suggestion_status_enum"]
           suggested_text?: string
           template_id?: string | null
-          tone_used?: Database['public']['Enums']['tone_scope_enum'] | null
+          tone_used?: Database["public"]["Enums"]["tone_scope_enum"] | null
           trigger_message_id?: string | null
           updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: 'whatsapp_suggestions_client_id_fkey'
-            columns: ['client_id']
+            foreignKeyName: "whatsapp_suggestions_client_id_fkey"
+            columns: ["client_id"]
             isOneToOne: false
-            referencedRelation: 'clients'
-            referencedColumns: ['id']
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'whatsapp_suggestions_contact_id_fkey'
-            columns: ['contact_id']
+            foreignKeyName: "whatsapp_suggestions_contact_id_fkey"
+            columns: ["contact_id"]
             isOneToOne: false
-            referencedRelation: 'whatsapp_contacts'
-            referencedColumns: ['id']
+            referencedRelation: "whatsapp_contacts"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'whatsapp_suggestions_trigger_message_id_fkey'
-            columns: ['trigger_message_id']
+            foreignKeyName: "whatsapp_suggestions_trigger_message_id_fkey"
+            columns: ["trigger_message_id"]
             isOneToOne: false
-            referencedRelation: 'whatsapp_messages'
-            referencedColumns: ['id']
+            referencedRelation: "whatsapp_messages"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1043,11 +1049,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'whatsapp_sync_state_instance_id_fkey'
-            columns: ['instance_id']
+            foreignKeyName: "whatsapp_sync_state_instance_id_fkey"
+            columns: ["instance_id"]
             isOneToOne: false
-            referencedRelation: 'evolution_instances'
-            referencedColumns: ['id']
+            referencedRelation: "evolution_instances"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1062,7 +1068,7 @@ export type Database = {
           last_used_at: string | null
           metadata: Json
           template_text: string
-          tone_scope: Database['public']['Enums']['tone_scope_enum']
+          tone_scope: Database["public"]["Enums"]["tone_scope_enum"]
           total_uses: number
           trigger_pattern: string | null
           updated_at: string
@@ -1077,7 +1083,7 @@ export type Database = {
           last_used_at?: string | null
           metadata?: Json
           template_text: string
-          tone_scope?: Database['public']['Enums']['tone_scope_enum']
+          tone_scope?: Database["public"]["Enums"]["tone_scope_enum"]
           total_uses?: number
           trigger_pattern?: string | null
           updated_at?: string
@@ -1092,18 +1098,18 @@ export type Database = {
           last_used_at?: string | null
           metadata?: Json
           template_text?: string
-          tone_scope?: Database['public']['Enums']['tone_scope_enum']
+          tone_scope?: Database["public"]["Enums"]["tone_scope_enum"]
           total_uses?: number
           trigger_pattern?: string | null
           updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: 'whatsapp_templates_semanticos_client_id_fkey'
-            columns: ['client_id']
+            foreignKeyName: "whatsapp_templates_semanticos_client_id_fkey"
+            columns: ["client_id"]
             isOneToOne: false
-            referencedRelation: 'clients'
-            referencedColumns: ['id']
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1131,55 +1137,61 @@ export type Database = {
         }[]
       }
       show_limit: { Args: never; Returns: number }
-      show_trgm: { Args: { '': string }; Returns: string[] }
-      unaccent: { Args: { '': string }; Returns: string }
+      show_trgm: { Args: { "": string }; Returns: string[] }
+      unaccent: { Args: { "": string }; Returns: string }
     }
     Enums: {
       conversation_status_enum:
-        | 'finalizada'
-        | 'pendente_resposta_minha'
-        | 'aguardando_resposta_cliente'
-        | 'nova'
-      message_direction_enum: 'inbound' | 'outbound'
+        | "finalizada"
+        | "pendente_resposta_minha"
+        | "aguardando_resposta_cliente"
+        | "nova"
+      message_direction_enum: "inbound" | "outbound"
       message_media_type_enum:
-        | 'text'
-        | 'audio'
-        | 'image'
-        | 'video'
-        | 'document'
-        | 'sticker'
-        | 'location'
-        | 'contact'
-        | 'reaction'
-        | 'poll'
-        | 'unknown'
+        | "text"
+        | "audio"
+        | "image"
+        | "video"
+        | "document"
+        | "sticker"
+        | "location"
+        | "contact"
+        | "reaction"
+        | "poll"
+        | "unknown"
       message_status_enum:
-        | 'pending'
-        | 'sent'
-        | 'delivered'
-        | 'read'
-        | 'failed'
-        | 'received'
-        | 'deleted'
-      outbound_priority_enum: 'immediate' | 'normal' | 'low'
-      outbound_status_enum: 'scheduled' | 'sending' | 'sent' | 'failed' | 'cancelled' | 'retrying'
+        | "pending"
+        | "sent"
+        | "delivered"
+        | "read"
+        | "failed"
+        | "received"
+        | "deleted"
+      outbound_priority_enum: "immediate" | "normal" | "low"
+      outbound_status_enum:
+        | "scheduled"
+        | "sending"
+        | "sent"
+        | "failed"
+        | "cancelled"
+        | "retrying"
       program_enum:
-        | 'adapta_elite'
-        | 'adapta_scale'
-        | 'skip_basic'
-        | 'skip_gold'
-        | 'skip_pro'
-        | 'adapta_pass'
-        | 'none'
+        | "adapta_elite"
+        | "adapta_scale"
+        | "skip_basic"
+        | "skip_gold"
+        | "skip_pro"
+        | "adapta_pass"
+        | "none"
       suggestion_status_enum:
-        | 'pending'
-        | 'approved'
-        | 'edited'
-        | 'rejected'
-        | 'auto_sent'
-        | 'expired'
-      tone_scope_enum: 'pessoal_geral' | 'client'
-      tracking_level_enum: 'full' | 'transcript_only' | 'none'
+        | "pending"
+        | "approved"
+        | "edited"
+        | "rejected"
+        | "auto_sent"
+        | "expired"
+      tone_scope_enum: "pessoal_geral" | "client"
+      tracking_level_enum: "full" | "transcript_only" | "none"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1187,31 +1199,33 @@ export type Database = {
   }
 }
 
-type DatabaseWithoutInternals = Omit<Database, '__InternalSupabase'>
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
 
-type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, 'public'>]
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
-    | keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
-    ? (DefaultSchema['Tables'] & DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R
       }
       ? R
@@ -1220,23 +1234,23 @@ export type Tables<
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Insert: infer I
       }
       ? I
@@ -1245,23 +1259,23 @@ export type TablesInsert<
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Update: infer U
       }
       ? U
@@ -1270,87 +1284,102 @@ export type TablesUpdate<
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema['Enums']
+    | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
-  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
-    ? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema['CompositeTypes']
+    | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
-    ? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
 
 export const Constants = {
   public: {
     Enums: {
       conversation_status_enum: [
-        'finalizada',
-        'pendente_resposta_minha',
-        'aguardando_resposta_cliente',
-        'nova',
+        "finalizada",
+        "pendente_resposta_minha",
+        "aguardando_resposta_cliente",
+        "nova",
       ],
-      message_direction_enum: ['inbound', 'outbound'],
+      message_direction_enum: ["inbound", "outbound"],
       message_media_type_enum: [
-        'text',
-        'audio',
-        'image',
-        'video',
-        'document',
-        'sticker',
-        'location',
-        'contact',
-        'reaction',
-        'poll',
-        'unknown',
+        "text",
+        "audio",
+        "image",
+        "video",
+        "document",
+        "sticker",
+        "location",
+        "contact",
+        "reaction",
+        "poll",
+        "unknown",
       ],
       message_status_enum: [
-        'pending',
-        'sent',
-        'delivered',
-        'read',
-        'failed',
-        'received',
-        'deleted',
+        "pending",
+        "sent",
+        "delivered",
+        "read",
+        "failed",
+        "received",
+        "deleted",
       ],
-      outbound_priority_enum: ['immediate', 'normal', 'low'],
-      outbound_status_enum: ['scheduled', 'sending', 'sent', 'failed', 'cancelled', 'retrying'],
+      outbound_priority_enum: ["immediate", "normal", "low"],
+      outbound_status_enum: [
+        "scheduled",
+        "sending",
+        "sent",
+        "failed",
+        "cancelled",
+        "retrying",
+      ],
       program_enum: [
-        'adapta_elite',
-        'adapta_scale',
-        'skip_basic',
-        'skip_gold',
-        'skip_pro',
-        'adapta_pass',
-        'none',
+        "adapta_elite",
+        "adapta_scale",
+        "skip_basic",
+        "skip_gold",
+        "skip_pro",
+        "adapta_pass",
+        "none",
       ],
-      suggestion_status_enum: ['pending', 'approved', 'edited', 'rejected', 'auto_sent', 'expired'],
-      tone_scope_enum: ['pessoal_geral', 'client'],
-      tracking_level_enum: ['full', 'transcript_only', 'none'],
+      suggestion_status_enum: [
+        "pending",
+        "approved",
+        "edited",
+        "rejected",
+        "auto_sent",
+        "expired",
+      ],
+      tone_scope_enum: ["pessoal_geral", "client"],
+      tracking_level_enum: ["full", "transcript_only", "none"],
     },
   },
 } as const
+
 
 // ====== DATABASE EXTENDED CONTEXT (auto-generated) ======
 // This section contains actual PostgreSQL column types, constraints, RLS policies,
@@ -1718,6 +1747,126 @@ export const Constants = {
 //   Policy "authenticated_update_document_section" (UPDATE, PERMISSIVE) roles={authenticated}
 //     USING: true
 //     WITH CHECK: true
+// Table: evolution_instances
+//   Policy "authenticated_delete_evolution_instances" (DELETE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_insert_evolution_instances" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: true
+//   Policy "authenticated_select_evolution_instances" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_update_evolution_instances" (UPDATE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//     WITH CHECK: true
+// Table: evolution_webhook_log
+//   Policy "authenticated_delete_evolution_webhook_log" (DELETE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_insert_evolution_webhook_log" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: true
+//   Policy "authenticated_select_evolution_webhook_log" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_update_evolution_webhook_log" (UPDATE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//     WITH CHECK: true
+// Table: holidays
+//   Policy "authenticated_delete_holidays" (DELETE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_insert_holidays" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: true
+//   Policy "authenticated_select_holidays" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_update_holidays" (UPDATE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//     WITH CHECK: true
+// Table: tone_of_voice
+//   Policy "authenticated_delete_tone_of_voice" (DELETE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_insert_tone_of_voice" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: true
+//   Policy "authenticated_select_tone_of_voice" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_update_tone_of_voice" (UPDATE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//     WITH CHECK: true
+// Table: whatsapp_contacts
+//   Policy "authenticated_delete_whatsapp_contacts" (DELETE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_insert_whatsapp_contacts" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: true
+//   Policy "authenticated_select_whatsapp_contacts" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_update_whatsapp_contacts" (UPDATE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//     WITH CHECK: true
+// Table: whatsapp_conversation_status
+//   Policy "authenticated_delete_whatsapp_conversation_status" (DELETE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_insert_whatsapp_conversation_status" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: true
+//   Policy "authenticated_select_whatsapp_conversation_status" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_update_whatsapp_conversation_status" (UPDATE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//     WITH CHECK: true
+// Table: whatsapp_messages
+//   Policy "authenticated_delete_whatsapp_messages" (DELETE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_insert_whatsapp_messages" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: true
+//   Policy "authenticated_select_whatsapp_messages" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_update_whatsapp_messages" (UPDATE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//     WITH CHECK: true
+// Table: whatsapp_outbound_queue
+//   Policy "authenticated_delete_whatsapp_outbound_queue" (DELETE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_insert_whatsapp_outbound_queue" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: true
+//   Policy "authenticated_select_whatsapp_outbound_queue" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_update_whatsapp_outbound_queue" (UPDATE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//     WITH CHECK: true
+// Table: whatsapp_response_metrics
+//   Policy "authenticated_delete_whatsapp_response_metrics" (DELETE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_insert_whatsapp_response_metrics" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: true
+//   Policy "authenticated_select_whatsapp_response_metrics" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_update_whatsapp_response_metrics" (UPDATE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//     WITH CHECK: true
+// Table: whatsapp_suggestions
+//   Policy "authenticated_delete_whatsapp_suggestions" (DELETE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_insert_whatsapp_suggestions" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: true
+//   Policy "authenticated_select_whatsapp_suggestions" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_update_whatsapp_suggestions" (UPDATE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//     WITH CHECK: true
+// Table: whatsapp_sync_state
+//   Policy "authenticated_delete_whatsapp_sync_state" (DELETE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_insert_whatsapp_sync_state" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: true
+//   Policy "authenticated_select_whatsapp_sync_state" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_update_whatsapp_sync_state" (UPDATE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//     WITH CHECK: true
+// Table: whatsapp_templates_semanticos
+//   Policy "authenticated_delete_whatsapp_templates_semanticos" (DELETE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_insert_whatsapp_templates_semanticos" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: true
+//   Policy "authenticated_select_whatsapp_templates_semanticos" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: true
+//   Policy "authenticated_update_whatsapp_templates_semanticos" (UPDATE, PERMISSIVE) roles={authenticated}
+//     USING: true
+//     WITH CHECK: true
 
 // --- DATABASE FUNCTIONS ---
 // FUNCTION business_minutes_between(timestamp with time zone, timestamp with time zone)
@@ -1752,13 +1901,13 @@ export const Constants = {
 //     bh_start := (cfg->>'start')::time;
 //     bh_end := (cfg->>'end')::time;
 //     SELECT array_agg((d)::int) INTO bh_days FROM jsonb_array_elements_text(cfg->'days') d;
-//
+//   
 //     cur := p_start;
 //     WHILE cur < p_end LOOP
 //       day_start := date_trunc('day', cur AT TIME ZONE tz) AT TIME ZONE tz;
 //       dow_local := EXTRACT(ISODOW FROM (cur AT TIME ZONE tz))::int;
 //       SELECT EXISTS(SELECT 1 FROM public.holidays WHERE date = (cur AT TIME ZONE tz)::date AND scope IN ('national','state')) INTO is_holiday;
-//
+//   
 //       IF dow_local = ANY(bh_days) AND NOT is_holiday THEN
 //         segment_start := GREATEST(cur, (day_start::date::text || ' ' || bh_start::text)::timestamp AT TIME ZONE tz);
 //         segment_end := LEAST(p_end, (day_start::date::text || ' ' || bh_end::text)::timestamp AT TIME ZONE tz);
@@ -1766,14 +1915,14 @@ export const Constants = {
 //           total_minutes := total_minutes + EXTRACT(EPOCH FROM (segment_end - segment_start))/60;
 //         END IF;
 //       END IF;
-//
+//   
 //       cur := day_start + INTERVAL '1 day';
 //     END LOOP;
-//
+//   
 //     RETURN total_minutes;
 //   END;
 //   $function$
-//
+//   
 // FUNCTION match_document_sections(vector, double precision, integer, integer)
 //   CREATE OR REPLACE FUNCTION public.match_document_sections(embedding vector, match_threshold double precision, match_count integer, min_content_length integer)
 //    RETURNS TABLE(id bigint, document_id bigint, content text, similarity double precision)
@@ -1793,7 +1942,7 @@ export const Constants = {
 //     limit match_count;
 //   end;
 //   $function$
-//
+//   
 // FUNCTION set_updated_at()
 //   CREATE OR REPLACE FUNCTION public.set_updated_at()
 //    RETURNS trigger
@@ -1801,7 +1950,7 @@ export const Constants = {
 //   AS $function$
 //   BEGIN NEW.updated_at = NOW(); RETURN NEW; END;
 //   $function$
-//
+//   
 
 // --- TRIGGERS ---
 // Table: clients
@@ -1882,3 +2031,4 @@ export const Constants = {
 //   CREATE INDEX idx_wpp_sync_state_status ON public.whatsapp_sync_state USING btree (status)
 // Table: whatsapp_templates_semanticos
 //   CREATE INDEX idx_wpp_templates_auto ON public.whatsapp_templates_semanticos USING btree (auto_send_enabled)
+
