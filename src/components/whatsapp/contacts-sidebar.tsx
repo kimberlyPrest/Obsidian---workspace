@@ -40,6 +40,7 @@ export function ContactsSidebar({ instanceId, selectedContactId, onSelect }: any
         .eq('instance_id', instanceId)
         .eq('monitored', true)
         .order('last_message_at', { ascending: false, nullsLast: true })
+        .limit(15)
 
       if (searchTerm) {
         q = q.or(`push_name.ilike.%${searchTerm}%,phone_number.ilike.%${searchTerm}%`)

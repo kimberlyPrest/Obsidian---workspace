@@ -35,7 +35,7 @@ export function ChatArea({ instanceId, contactId, onOpenContacts, onToggleDetail
   const fetchMessages = useCallback(
     async (p = 0, jid: string) => {
       if (p === 0) setLoading(true)
-      const pageSize = 50
+      const pageSize = 20
       const { data } = await supabase
         .from('whatsapp_messages')
         .select(
@@ -43,12 +43,13 @@ export function ChatArea({ instanceId, contactId, onOpenContacts, onToggleDetail
         )
         .eq('instance_id', instanceId)
         .eq('remote_jid', jid)
-        .order('message_timestamp', { ascending: true })
+        .order('message_timestamp', { ascending: false })
         .range(p * pageSize, (p + 1) * pageSize - 1)
 
       if (data) {
-        if (p === 0) setMessages(data)
-        else setMessages((prev) => [...data, ...prev])
+        const chronologicalData = [...data].reverse()
+        if (p === 0) setMessages(chronologicalData)
+        else setMessages((prev) => [...chronologicalData, ...prev])
         setHasMore(data.length === pageSize)
       }
       if (p === 0) setLoading(false)
