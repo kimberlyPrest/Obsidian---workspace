@@ -42,7 +42,7 @@ export function ChatArea({ instanceId, contactId, onOpenContacts, onToggleDetail
           '*, quoted:whatsapp_messages!whatsapp_messages_quoted_message_id_fkey(content, from_me, media_type)',
         )
         .eq('instance_id', instanceId)
-        .or(`contact_id.eq.${contactId},remote_jid.eq.${jid}`)
+        .eq('remote_jid', jid)
         .order('message_timestamp', { ascending: false })
         .range(p * pageSize, (p + 1) * pageSize - 1)
 
