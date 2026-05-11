@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Button } from '@/components/ui/button'
@@ -26,54 +26,66 @@ const StatusIcon = ({ status }: { status: string }) => {
 export function ChatArea({ instanceId, contactId, onOpenContacts, onToggleDetails }: any) {
   const [messages, setMessages] = useState<any[]>([])
   const [contact, setContact] = useState<any>(null)
+  const [remoteJid, setRemoteJid] = useState<string | null>(null)
   const [page, setPage] = useState(0)
   const [hasMore, setHasMore] = useState(true)
   const [loading, setLoading] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  const fetchMessages = async (p = 0) => {
-    if (p === 0) setLoading(true)
-    const pageSize = 50
-    const { data } = await supabase
-      .from('whatsapp_messages')
-      .select(
-        '*, quoted:whatsapp_messages!whatsapp_messages_quoted_message_id_fkey(content, from_me, media_type)',
-      )
-      .eq('instance_id', instanceId)
-      .eq('contact_id', contactId)
-      .order('message_timestamp', { ascending: false })
-      .range(p * pageSize, (p + 1) * pageSize - 1)
+  const fetchMessages = useCallback(
+    async (p = 0, jid: string) => {
+      if (p === 0) setLoading(true)
+      const pageSize = 50
+      const { data } = await supabase
+        .from('whatsapp_messages')
+        .select(
+          '*, quoted:whatsapp_messages!whatsapp_messages_quoted_message_id_fkey(content, from_me, media_type)',
+        )
+        .eq('instance_id', instanceId)
+        .or(`contact_id.eq.${contactId},remote_jid.eq.${jid}`)
+        .order('message_timestamp', { ascending: false })
+        .range(p * pageSize, (p + 1) * pageSize - 1)
 
-    if (data) {
-      const reversed = [...data].reverse()
-      if (p === 0) setMessages(reversed)
-      else setMessages((prev) => [...reversed, ...prev])
-      setHasMore(data.length === pageSize)
-    }
-    if (p === 0) setLoading(false)
-  }
+      if (data) {
+        const reversed = [...data].reverse()
+        if (p === 0) setMessages(reversed)
+        else setMessages((prev) => [...reversed, ...prev])
+        setHasMore(data.length === pageSize)
+      }
+      if (p === 0) setLoading(false)
+    },
+    [instanceId, contactId],
+  )
 
   useEffect(() => {
-    setPage(0)
-    fetchMessages(0)
     supabase
       .from('whatsapp_contacts')
       .select('*')
       .eq('id', contactId)
       .single()
-      .then(({ data }) => setContact(data))
+      .then(({ data }) => {
+        setContact(data)
+        setRemoteJid(data?.remote_jid || null)
+      })
   }, [contactId])
 
   useEffect(() => {
+    if (!remoteJid) return
+    setPage(0)
+    fetchMessages(0, remoteJid)
+  }, [remoteJid, fetchMessages])
+
+  useEffect(() => {
+    if (!remoteJid) return
     const sub = supabase
-      .channel(`chat_${contactId}`)
+      .channel(`chat_${remoteJid}`)
       .on(
         'postgres_changes',
         {
           event: 'INSERT',
           schema: 'public',
           table: 'whatsapp_messages',
-          filter: `contact_id=eq.${contactId}`,
+          filter: `remote_jid=eq.${remoteJid}`,
         },
         (payload) => {
           setMessages((prev) => [...prev, payload.new])
@@ -86,7 +98,7 @@ export function ChatArea({ instanceId, contactId, onOpenContacts, onToggleDetail
           event: 'UPDATE',
           schema: 'public',
           table: 'whatsapp_messages',
-          filter: `contact_id=eq.${contactId}`,
+          filter: `remote_jid=eq.${remoteJid}`,
         },
         (payload) => {
           setMessages((prev) =>
@@ -98,7 +110,7 @@ export function ChatArea({ instanceId, contactId, onOpenContacts, onToggleDetail
     return () => {
       supabase.removeChannel(sub)
     }
-  }, [contactId])
+  }, [remoteJid])
 
   useEffect(() => {
     if (page === 0 && !loading) {
@@ -120,7 +132,15 @@ export function ChatArea({ instanceId, contactId, onOpenContacts, onToggleDetail
             <Menu className="h-5 w-5" />
           </Button>
           <div className="font-medium font-heading">
-            {contact?.push_name || contact?.phone_number || 'Carregando...'}
+            {contact?.push_name ||
+              contact?.phone_number ||
+              (contact?.remote_jid
+                ? contact.remote_jid.endsWith('@lid')
+                  ? `LID: ${contact.remote_jid.split('@')[0]}`
+                  : contact.remote_jid.endsWith('@g.us')
+                    ? `Grupo: ${contact.remote_jid.split('@')[0]}`
+                    : `+${contact.remote_jid.split('@')[0]}`
+                : 'Carregando...')}
           </div>
         </div>
         <Button
@@ -157,7 +177,7 @@ export function ChatArea({ instanceId, contactId, onOpenContacts, onToggleDetail
                   size="sm"
                   onClick={() => {
                     setPage((p) => p + 1)
-                    fetchMessages(page + 1)
+                    if (remoteJid) fetchMessages(page + 1, remoteJid)
                   }}
                 >
                   Carregar mensagens antigas

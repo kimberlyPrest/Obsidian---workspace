@@ -18,6 +18,14 @@ const safeFormatTime = (ts: string) => {
   }
 }
 
+const formatJid = (jid: string) => {
+  if (!jid) return ''
+  const id = jid.split('@')[0]
+  if (jid.endsWith('@lid')) return `LID: ${id}`
+  if (jid.endsWith('@g.us')) return `Grupo: ${id}`
+  return `+${id}`
+}
+
 export function ContactsSidebar({ instanceId, selectedContactId, onSelect }: any) {
   const [search, setSearch] = useState('')
   const [contacts, setContacts] = useState<any[]>([])
@@ -140,7 +148,7 @@ export function ContactsSidebar({ instanceId, selectedContactId, onSelect }: any
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-center mb-1">
                       <span className="font-medium text-sm truncate pr-2">
-                        {c.push_name || c.phone_number || c.remote_jid}
+                        {c.push_name || c.phone_number || formatJid(c.remote_jid)}
                       </span>
                       <span className="text-[10px] text-muted-foreground whitespace-nowrap">
                         {safeFormatTime(c.last_message_at)}

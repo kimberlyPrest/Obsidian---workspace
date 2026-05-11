@@ -18,6 +18,14 @@ const safeFormatDate = (ts: string) => {
   }
 }
 
+const formatJid = (jid: string) => {
+  if (!jid) return ''
+  const id = jid.split('@')[0]
+  if (jid.endsWith('@lid')) return `LID: ${id}`
+  if (jid.endsWith('@g.us')) return `Grupo: ${id}`
+  return `+${id}`
+}
+
 export function ContactDetails({ instanceId, contactId }: any) {
   const [contact, setContact] = useState<any>(null)
   const [status, setStatus] = useState<any>(null)
@@ -80,7 +88,7 @@ export function ContactDetails({ instanceId, contactId }: any) {
           {contact.push_name || 'Desconhecido'}
         </h2>
         <p className="text-muted-foreground text-sm mt-1">
-          {contact.phone_number || contact.remote_jid}
+          {contact.phone_number || formatJid(contact.remote_jid)}
         </p>
 
         <Badge
