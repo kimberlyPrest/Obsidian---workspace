@@ -180,7 +180,7 @@ export function ChatArea({ instanceId, contactId, onOpenContacts, onToggleDetail
                     if (remoteJid) fetchMessages(page + 1, remoteJid)
                   }}
                 >
-                  Carregar mensagens antigas
+                  Carregar mais...
                 </Button>
               </div>
             )}

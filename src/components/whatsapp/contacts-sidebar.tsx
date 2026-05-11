@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Search, User } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -30,17 +31,21 @@ export function ContactsSidebar({ instanceId, selectedContactId, onSelect }: any
   const [search, setSearch] = useState('')
   const [contacts, setContacts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [page, setPage] = useState(0)
+  const [hasMore, setHasMore] = useState(true)
 
   const fetchContacts = useCallback(
-    async (searchTerm: string, isBackground = false) => {
-      if (!isBackground) setLoading(true)
+    async (searchTerm: string, pageNum = 0, isBackground = false) => {
+      if (!isBackground && pageNum === 0) setLoading(true)
+      const pageSize = 15
+
       let q = supabase
         .from('whatsapp_contacts')
         .select('*')
         .eq('instance_id', instanceId)
         .eq('monitored', true)
         .order('last_message_at', { ascending: false, nullsLast: true })
-        .limit(15)
+        .range(pageNum * pageSize, (pageNum + 1) * pageSize - 1)
 
       if (searchTerm) {
         q = q.or(`push_name.ilike.%${searchTerm}%,phone_number.ilike.%${searchTerm}%`)
@@ -59,17 +64,33 @@ export function ContactsSidebar({ instanceId, selectedContactId, onSelect }: any
           ...c,
           whatsapp_conversation_status: statusMap.get(c.id) || null,
         }))
-        setContacts(mergedData)
+
+        if (pageNum === 0) {
+          setContacts(mergedData)
+        } else {
+          setContacts((prev) => {
+            const newContacts = [...prev]
+            mergedData.forEach((mc) => {
+              if (!newContacts.find((c) => c.id === mc.id)) {
+                newContacts.push(mc)
+              }
+            })
+            return newContacts
+          })
+        }
+        setHasMore(data.length === pageSize)
       } else {
-        setContacts([])
+        if (pageNum === 0) setContacts([])
+        setHasMore(false)
       }
-      if (!isBackground) setLoading(false)
+      if (!isBackground && pageNum === 0) setLoading(false)
     },
     [instanceId],
   )
 
   useEffect(() => {
-    const t = setTimeout(() => fetchContacts(search, false), 300)
+    setPage(0)
+    const t = setTimeout(() => fetchContacts(search, 0, false), 300)
     return () => clearTimeout(t)
   }, [search, fetchContacts])
 
@@ -84,7 +105,7 @@ export function ContactsSidebar({ instanceId, selectedContactId, onSelect }: any
           table: 'whatsapp_conversation_status',
           filter: `instance_id=eq.${instanceId}`,
         },
-        () => fetchContacts(search, true),
+        () => fetchContacts(search, 0, true),
       )
       .on(
         'postgres_changes',
@@ -94,7 +115,7 @@ export function ContactsSidebar({ instanceId, selectedContactId, onSelect }: any
           table: 'whatsapp_conversation_status',
           filter: `instance_id=eq.${instanceId}`,
         },
-        () => fetchContacts(search, true),
+        () => fetchContacts(search, 0, true),
       )
       .on(
         'postgres_changes',
@@ -104,7 +125,7 @@ export function ContactsSidebar({ instanceId, selectedContactId, onSelect }: any
           table: 'whatsapp_contacts',
           filter: `instance_id=eq.${instanceId}`,
         },
-        () => fetchContacts(search, true),
+        () => fetchContacts(search, 0, true),
       )
       .subscribe()
     return () => {
@@ -199,6 +220,23 @@ export function ContactsSidebar({ instanceId, selectedContactId, onSelect }: any
                 </button>
               )
             })}
+
+            {hasMore && (
+              <div className="p-2 pt-4 pb-4 flex justify-center">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    const nextPage = page + 1
+                    setPage(nextPage)
+                    fetchContacts(search, nextPage, false)
+                  }}
+                  className="w-full text-muted-foreground text-xs"
+                >
+                  Carregar mais...
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </ScrollArea>
