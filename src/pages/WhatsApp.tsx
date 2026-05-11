@@ -1,161 +1,110 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import { Badge } from '@/components/ui/badge'
-import { Phone, CheckCircle2, XCircle, Users } from 'lucide-react'
-
-interface Instance {
-  id: string
-  instance_name: string
-  status: string
-  last_connected_at: string
-}
-
-interface Contact {
-  id: string
-  remote_jid: string
-  push_name: string
-  phone_number: string
-}
+import { ContactsSidebar } from '@/components/whatsapp/contacts-sidebar'
+import { ChatArea } from '@/components/whatsapp/chat-area'
+import { ContactDetails } from '@/components/whatsapp/contact-details'
+import { useIsMobile } from '@/hooks/use-mobile'
+import { Sheet, SheetContent, SheetTitle, SheetDescription } from '@/components/ui/sheet'
+import { MessageSquare } from 'lucide-react'
 
 export default function WhatsAppModule() {
-  const [instances, setInstances] = useState<Instance[]>([])
-  const [contacts, setContacts] = useState<Contact[]>([])
-  const [loading, setLoading] = useState(true)
+  const [instanceId, setInstanceId] = useState<string | null>(null)
+  const [selectedContactId, setSelectedContactId] = useState<string | null>(null)
+  const [showMobileContacts, setShowMobileContacts] = useState(true)
+  const [showDetails, setShowDetails] = useState(false)
+  const isMobile = useIsMobile()
 
   useEffect(() => {
-    async function fetchData() {
-      const [{ data: instData }, { data: contData }] = await Promise.all([
-        supabase.from('evolution_instances').select('*').limit(5),
-        supabase
-          .from('whatsapp_contacts')
-          .select('*')
-          .order('last_message_at', { ascending: false })
-          .limit(5),
-      ])
-      if (instData) setInstances(instData as any)
-      if (contData) setContacts(contData as any)
-      setLoading(false)
-    }
-    fetchData()
+    supabase
+      .from('evolution_instances')
+      .select('id')
+      .eq('status', 'connected')
+      .limit(1)
+      .single()
+      .then(({ data }) => {
+        if (data) setInstanceId(data.id)
+      })
   }, [])
 
+  const handleSelectContact = (id: string) => {
+    setSelectedContactId(id)
+    if (isMobile) setShowMobileContacts(false)
+  }
+
+  if (!instanceId)
+    return (
+      <div className="flex h-[calc(100vh-4rem)] items-center justify-center animate-fade-in-up">
+        <div className="text-muted-foreground flex flex-col items-center">
+          <MessageSquare className="h-8 w-8 mb-2 animate-pulse" />
+          <p>Conectando ao WhatsApp...</p>
+        </div>
+      </div>
+    )
+
   return (
-    <div className="space-y-6 animate-fade-in-up">
-      <div>
-        <h1 className="text-3xl font-heading font-bold text-foreground">Módulo WhatsApp</h1>
-        <p className="text-muted-foreground mt-2">
-          Acompanhamento e controle de instâncias Evolution e seus contatos recentes.
-        </p>
+    <div className="flex h-[calc(100vh-4rem)] border border-border rounded-lg overflow-hidden bg-card animate-fade-in-up">
+      {/* Desktop Sidebar */}
+      {!isMobile && (
+        <div className="w-[300px] border-r border-border flex flex-col bg-card shrink-0">
+          <ContactsSidebar
+            instanceId={instanceId}
+            selectedContactId={selectedContactId}
+            onSelect={handleSelectContact}
+          />
+        </div>
+      )}
+
+      {/* Mobile Contacts Sheet */}
+      {isMobile && (
+        <Sheet open={showMobileContacts} onOpenChange={setShowMobileContacts}>
+          <SheetContent side="left" className="p-0 w-[300px] border-border bg-card">
+            <SheetTitle className="sr-only">Contatos</SheetTitle>
+            <SheetDescription className="sr-only">Lista de conversas do WhatsApp</SheetDescription>
+            <ContactsSidebar
+              instanceId={instanceId}
+              selectedContactId={selectedContactId}
+              onSelect={handleSelectContact}
+            />
+          </SheetContent>
+        </Sheet>
+      )}
+
+      {/* Main Chat Area */}
+      <div className="flex-1 flex flex-col min-w-0 bg-background relative">
+        {selectedContactId ? (
+          <ChatArea
+            instanceId={instanceId}
+            contactId={selectedContactId}
+            onOpenContacts={() => setShowMobileContacts(true)}
+            onToggleDetails={() => setShowDetails(!showDetails)}
+          />
+        ) : (
+          <div className="flex-1 flex items-center justify-center text-muted-foreground flex-col bg-background">
+            <MessageSquare className="h-12 w-12 mb-4 opacity-20" />
+            <p className="text-sm">Selecione uma conversa para começar</p>
+          </div>
+        )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="bg-card border-border shadow-none">
-          <CardHeader>
-            <CardTitle className="font-heading flex items-center text-lg">
-              <Phone className="mr-2 h-5 w-5 text-primary" />
-              Instâncias Evolution
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {loading ? (
-              <p className="text-muted-foreground">Carregando instâncias...</p>
-            ) : instances.length === 0 ? (
-              <p className="text-muted-foreground">Nenhuma instância configurada.</p>
-            ) : (
-              <div className="space-y-4">
-                {instances.map((inst) => (
-                  <div
-                    key={inst.id}
-                    className="flex items-center justify-between p-4 bg-card-secondary rounded-md border border-border"
-                  >
-                    <div>
-                      <p className="font-medium text-foreground">{inst.instance_name}</p>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Última conexão:{' '}
-                        {inst.last_connected_at
-                          ? new Date(inst.last_connected_at).toLocaleDateString()
-                          : 'Nunca'}
-                      </p>
-                    </div>
-                    <Badge
-                      variant="outline"
-                      className={
-                        inst.status === 'connected'
-                          ? 'bg-success/10 text-success border-success/20 font-medium'
-                          : 'bg-destructive/10 text-destructive border-destructive/20 font-medium'
-                      }
-                    >
-                      {inst.status === 'connected' ? (
-                        <CheckCircle2 className="h-3 w-3 mr-1.5" />
-                      ) : (
-                        <XCircle className="h-3 w-3 mr-1.5" />
-                      )}
-                      {inst.status === 'connected' ? 'Conectado' : 'Desconectado'}
-                    </Badge>
-                  </div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+      {/* Desktop Details */}
+      {!isMobile && selectedContactId && showDetails && (
+        <div className="w-[350px] border-l border-border flex flex-col bg-card shrink-0">
+          <ContactDetails instanceId={instanceId} contactId={selectedContactId} />
+        </div>
+      )}
 
-        <Card className="bg-card border-border shadow-none">
-          <CardHeader>
-            <CardTitle className="font-heading flex items-center text-lg">
-              <Users className="mr-2 h-5 w-5 text-accent" />
-              Últimos Contatos
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {loading ? (
-              <p className="text-muted-foreground">Carregando contatos...</p>
-            ) : (
-              <div className="rounded-md border border-border overflow-hidden">
-                <Table>
-                  <TableHeader className="bg-card-secondary">
-                    <TableRow className="border-border hover:bg-transparent">
-                      <TableHead className="text-muted-foreground font-medium">Nome</TableHead>
-                      <TableHead className="text-muted-foreground font-medium">Telefone</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {contacts.length === 0 ? (
-                      <TableRow className="border-border">
-                        <TableCell colSpan={2} className="text-center text-muted-foreground py-6">
-                          Nenhum contato encontrado.
-                        </TableCell>
-                      </TableRow>
-                    ) : (
-                      contacts.map((c) => (
-                        <TableRow
-                          key={c.id}
-                          className="border-border hover:bg-card-secondary transition-colors"
-                        >
-                          <TableCell className="font-medium text-foreground">
-                            {c.push_name || 'Desconhecido'}
-                          </TableCell>
-                          <TableCell className="text-muted-foreground">
-                            {c.phone_number || c.remote_jid}
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+      {/* Mobile Details Sheet */}
+      {isMobile && selectedContactId && (
+        <Sheet open={showDetails} onOpenChange={setShowDetails}>
+          <SheetContent side="right" className="p-0 w-full sm:w-[350px] border-border bg-card">
+            <SheetTitle className="sr-only">Detalhes do Contato</SheetTitle>
+            <SheetDescription className="sr-only">
+              Informações da conversa selecionada
+            </SheetDescription>
+            <ContactDetails instanceId={instanceId} contactId={selectedContactId} />
+          </SheetContent>
+        </Sheet>
+      )}
     </div>
   )
 }
